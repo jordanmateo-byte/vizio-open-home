@@ -1,0 +1,5 @@
+.private/
+node_modules/
+usb-kit/
+*.zip
+.DS_Store

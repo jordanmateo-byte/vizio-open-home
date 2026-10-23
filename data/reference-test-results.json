@@ -1,0 +1,44 @@
+{
+  "device": {
+    "model": "M657-G0",
+    "platform": "SX7B",
+    "firmware": "7.0.120.1-1",
+    "modelGroup": 271
+  },
+  "date": "2026-10-22",
+  "root": "uid=0(root) gid=0(root) via USB CGI",
+  "homeWithoutUsb": true,
+  "powerCycleWithoutUsb": true,
+  "hdmi": true,
+  "volume": true,
+  "firmwareFlashed": false,
+  "permanentShellInstalled": false,
+  "apps": {
+    "ViX": {
+      "launch": "SUCCESS",
+      "user": "Carga, pero no probé reproducir",
+      "include": true
+    },
+    "Pluto TV": {
+      "launch": "SUCCESS",
+      "user": "Error persistente al reiniciar la app",
+      "include": false
+    },
+    "MUBI": {
+      "launch": "SUCCESS",
+      "user": "Carga correctamente",
+      "include": true
+    },
+    "Paramount+": {
+      "launch": "SUCCESS",
+      "user": "Muestra error o no abre",
+      "include": false
+    },
+    "Tubi": {
+      "launch": "SUCCESS",
+      "user": "Carga correctamente",
+      "include": true
+    }
+  },
+  "note": "User confirmed UI loading for ViX, MUBI and Tubi; playback not independently verified. Defaults in the library do not blacklist these failures globally."
+}

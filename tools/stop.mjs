@@ -1,0 +1,1 @@
+import fs from 'node:fs';import {privatePath} from './common.mjs';fs.writeFileSync(privatePath('firewall-stop'),'stop');console.log('Se pidió retirar la regla temporal. Cierra bridge-server con Ctrl+C y comprueba .private/firewall-status = REMOVED.');

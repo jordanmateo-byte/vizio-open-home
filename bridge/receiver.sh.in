@@ -1,0 +1,44 @@
+#!/bin/sh
+# Fixed operations only. No eval, shell parameters, or system-file access.
+key=${QUERY_STRING%%&*}
+remaining=${QUERY_STRING#*&}
+operation=${remaining%%&*}
+name=${remaining#*&}
+respond() { printf 'Status: %s\r\nContent-Type: text/plain; charset=utf-8\r\nCache-Control: no-store\r\n\r\n%s\n' "$1" "$2"; }
+if [ "$key" != '__TOKEN__' ]; then respond '403 Forbidden' 'Clave incorrecta'; exit; fi
+now=$(date +%s 2>/dev/null)
+case "$now" in ''|*[!0-9]*) respond '503 Service Unavailable' 'No se pudo verificar la caducidad'; exit ;; esac
+if [ "$now" -ge __EXPIRES__ ]; then respond '410 Gone' 'Sesión caducada'; exit; fi
+case "$name" in
+  sc-config.private.json|home-original.private.html|index.html|prueba.html|diagnostico.cgi|inspeccion.cgi|mapa-detallado.cgi|respaldo-home.cgi|mapa-informe.txt|transferencia-prueba.txt) ;;
+  *) respond '403 Forbidden' 'Archivo no autorizado'; exit ;;
+esac
+root=/tmp/usbparts/sda1
+if [ ! -d "$root" ]; then respond '503 Service Unavailable' 'USB no encontrada'; exit; fi
+if [ -L "$root/$name" ]; then respond '403 Forbidden' 'Enlace no permitido'; exit; fi
+case "$operation:$REQUEST_METHOD" in
+  get:GET)
+    # Reading CGI source must never execute it.
+    if [ ! -f "$root/$name" ]; then respond '404 Not Found' 'Archivo no encontrado'; exit; fi
+    printf 'Content-Type: text/plain; charset=utf-8\r\nCache-Control: no-store\r\n\r\n'
+    cat "$root/$name"
+    ;;
+  run:GET)
+    case "$name" in diagnostico.cgi|inspeccion.cgi|mapa-detallado.cgi|respaldo-home.cgi) exec /bin/sh "$root/$name" ;; *) respond '403 Forbidden' 'Ejecución no autorizada' ;; esac
+    ;;
+  put:POST)
+    case "$name" in sc-config.private.json|home-original.private.html) respond '403 Forbidden' 'Respaldo de solo lectura'; exit ;; esac
+    case "$CONTENT_LENGTH" in ''|*[!0-9]*) respond '400 Bad Request' 'Longitud inválida'; exit ;; esac
+    if [ "$CONTENT_LENGTH" -gt 131072 ]; then respond '413 Payload Too Large' 'Máximo 128 KiB'; exit; fi
+    if ! command -v __RECEIVER_TOOL__ >/dev/null 2>&1 || ! command -v mv >/dev/null 2>&1 || ! command -v wc >/dev/null 2>&1; then respond '501 Not Implemented' 'Faltan __RECEIVER_TOOL__, mv o wc'; exit; fi
+    temp="$root/.vizio-transfer-__TOKEN__-__METHOD__-$$"
+    if [ -e "$temp" ] || [ -L "$temp" ]; then respond '409 Conflict' 'Archivo temporal ya existe'; exit; fi
+    if ! (umask 077; __RECEIVE_COMMAND__ > "$temp"); then rm -f "$temp"; respond '500 Internal Server Error' 'Falló receptor __METHOD__'; exit; fi
+    actual=$(wc -c < "$temp")
+    if [ "$actual" -ne "$CONTENT_LENGTH" ]; then rm -f "$temp"; respond '400 Bad Request' 'Transferencia incompleta'; exit; fi
+    if [ -L "$root/$name" ]; then rm -f "$temp"; respond '403 Forbidden' 'Destino cambiado'; exit; fi
+    mv "$temp" "$root/$name" || { respond '500 Internal Server Error' 'No se pudo guardar'; exit; }
+    respond '200 OK' 'Archivo recibido en USB'
+    ;;
+  *) respond '405 Method Not Allowed' 'Operación no autorizada' ;;
+esac
