@@ -31,3 +31,7 @@ El README explica el problema con sus palabras exactas, presenta el antes/despu�
 El repositorio público puede aparecer en Google, pero no se garantiza indexación, posición ni el texto mostrado. GitHub controla el HTML de sus páginas: añadir etiquetas meta en el README no configura sus títulos ni Open Graph. Una página web del proyecto sería otra publicación y no es necesaria para compartir el repositorio.
 
 Fuentes: [títulos descriptivos en Google](https://developers.google.com/search/docs/appearance/title-link), [temas de GitHub](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/classifying-your-repository-with-topics), [vista previa social de GitHub](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repositorys-social-media-preview).
+
+## Portada social
+
+Imagen: `docs/images/social-before-after.jpg` (JPEG ligero), con original PNG en la misma carpeta. Portada compuesta con IA usando las imágenes documentadas del antes y después. Texto: «ADIÓS AL BLOQUEO · RECUPERA TU TV». Se refiere al inicio de VIZIO Home, no al desbloqueo de catálogos. La instalación inicial requiere una PC y una USB; el uso posterior de la instalación interna comprobada es autónomo.

@@ -1,5 +1,9 @@
 # Vizio Open Home: recupera el inicio de tu Vizio bloqueado por región
 
+![Vizio Open Home: antes y después, adiós al bloqueo del inicio](docs/images/social-before-after.jpg)
+
+*Portada promocional compuesta con IA a partir de la reconstrucción del aviso regional y la vista previa del launcher. El bloqueo al que se refiere es el de VIZIO Home.*
+
 **Recupera el inicio de una Vizio fuera de EE. UU. cuando VIZIO Home queda bloqueado por región.**
 
 **Root confirmado. Home recuperado. Arranque autónomo, sin PC, USB ni Fire Stick.**
